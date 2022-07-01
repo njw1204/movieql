@@ -3,16 +3,13 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "node build/src/index.js",
-    "dev": "nodemon src/index.ts",
-    "lint": "eslint '**/*.ts'",
-    "clean": "rimraf build",
-    "prebuild": "yarn run clean",
-    "build": "tsc",
-    "fix": "eslint --fix '**/*.ts'",
-    "prepare": "yarn run build",
-    "pretest": "yarn run build",
-    "posttest": "yarn run lint"
+    "start": "yarn node build/src/index.js",
+    "dev": "yarn nodemon src/index.ts",
+    "lint": "yarn eslint '**/*.ts'",
+    "clean": "yarn rimraf build",
+    "prebuild": "yarn clean",
+    "build": "yarn prebuild && tsc",
+    "fix": "yarn eslint --fix '**/*.ts'"
   },
   "dependencies": {
     "apollo-server": "^3.9.0",
@@ -22,6 +19,7 @@
   "devDependencies": {
     "@types/node": "^18.0.0",
     "@types/node-fetch": "2",
+    "eslint": "^8.18.0",
     "nodemon": "^2.0.18",
     "rimraf": "^3.0.2",
     "ts-node": "^10.8.1",
