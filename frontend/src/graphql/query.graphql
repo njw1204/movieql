@@ -1,0 +1,54 @@
+query AllMovies($minimumRating: Float) {
+  movies(minimumRating: $minimumRating) {
+    id
+    url
+    imdb_code
+    title
+    year
+    rating
+    runtime
+    genres
+    summary
+    description_full
+    synopsis
+    background_image
+    small_cover_image
+    medium_cover_image
+    large_cover_image
+  }
+}
+
+query Movie($id: ID!) {
+  movie(id: $id) {
+    id
+    url
+    imdb_code
+    title
+    year
+    rating
+    runtime
+    genres
+    summary
+    description_full
+    synopsis
+    background_image
+    small_cover_image
+    medium_cover_image
+    large_cover_image
+    comments {
+      id
+      message
+    }
+  }
+}
+
+query AllComments {
+  comments {
+    id
+    message
+    fromMovie {
+      id
+      title
+    }
+  }
+}

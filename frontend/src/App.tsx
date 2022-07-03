@@ -1,10 +1,13 @@
 import {useApolloClient} from '@apollo/client';
 import {useEffect, useState} from 'react';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import {ALL_COMMENTS} from './graphql';
 import Movie from './routes/Movie';
 import Movies from './routes/Movies';
 import './App.css';
+import {
+  AllCommentsDocument,
+  AllCommentsQuery,
+} from './graphql/generated/graphql';
 
 function App() {
   const [init, setInit] = useState(true);
@@ -13,8 +16,8 @@ function App() {
   useEffect(() => {
     if (init) {
       apolloClient
-        .query({
-          query: ALL_COMMENTS,
+        .query<AllCommentsQuery>({
+          query: AllCommentsDocument,
         })
         .then(result => console.log(result.data.comments));
     }

@@ -1,0 +1,12 @@
+overwrite: true
+schema: 'schema.graphql'
+documents: null
+generates:
+  src/generated/graphql-types.ts:
+    config:
+      mappers:
+        Movie: '../entities/movie#default as MovieEntity'
+        Comment: '../entities/comment#default as CommentEntity'
+    plugins:
+      - 'typescript'
+      - 'typescript-resolvers'

@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "yarn node build/src/index.js",
-    "dev": "yarn nodemon src/index.ts",
-    "lint": "yarn eslint '**/*.ts'",
-    "clean": "yarn rimraf build",
-    "prebuild": "yarn clean",
+    "start": "node build/index.js",
+    "dev": "concurrently \"nodemon src/index.ts\" \"yarn graphqlgen --watch\"",
+    "lint": "eslint '**/*.ts'",
+    "clean": "rimraf build",
+    "prebuild": "yarn clean && yarn graphqlgen",
     "build": "yarn prebuild && tsc",
-    "fix": "yarn eslint --fix '**/*.ts'"
+    "fix": "eslint --fix '**/*.ts'",
+    "graphqlgen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
     "apollo-server": "^3.9.0",
@@ -17,8 +18,13 @@
     "node-fetch": "2"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "2.6.4",
+    "@graphql-codegen/introspection": "2.1.1",
+    "@graphql-codegen/typescript": "2.5.1",
+    "@graphql-codegen/typescript-resolvers": "2.6.6",
     "@types/node": "^18.0.0",
     "@types/node-fetch": "2",
+    "concurrently": "^7.2.2",
     "eslint": "^8.18.0",
     "nodemon": "^2.0.18",
     "rimraf": "^3.0.2",

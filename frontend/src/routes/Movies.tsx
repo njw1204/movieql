@@ -1,18 +1,31 @@
 import {useQuery} from '@apollo/client';
 import {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
-import {ALL_MOVIES} from '../graphql';
+import {
+  AllMoviesDocument,
+  AllMoviesQuery,
+  AllMoviesQueryVariables,
+} from '../graphql/generated/graphql';
 
 const MINIMUM_RATING_LOCAL_KEY = 'movieqlMinimumRating';
 
 export default function Movies() {
   const [minimumRating, setMinimumRating] = useState(() => {
+    const defaultState = 8;
     const localState = window.localStorage.getItem(MINIMUM_RATING_LOCAL_KEY);
-    return (localState && Number(localState)) ?? 8;
+
+    if (!localState) {
+      return defaultState;
+    }
+
+    return isNaN(Number(localState)) ? defaultState : Number(localState);
   });
-  const {data, loading, error} = useQuery(ALL_MOVIES, {
-    variables: {minimumRating},
-  });
+  const {data, error} = useQuery<AllMoviesQuery, AllMoviesQueryVariables>(
+    AllMoviesDocument,
+    {
+      variables: {minimumRating},
+    }
+  );
 
   useEffect(() => {
     window.localStorage.setItem(
@@ -47,14 +60,14 @@ export default function Movies() {
           />
         </label>
       </form>
-      {loading ? (
+      {!data ? (
         <h2>Now Loading...</h2>
       ) : (
         <ul>
-          {data.movies.map((movie: any) => (
+          {data?.movies.map(movie => (
             <li
               key={movie.id}
-              style={{display: 'inline-block', margin: '12px'}}
+              style={{display: 'inline-block', margin: '16px'}}
             >
               <Link
                 to={`/movies/${movie.id}`}
@@ -66,7 +79,10 @@ export default function Movies() {
                 }}
               >
                 <h2 style={{margin: '0', padding: '4px'}}>{movie.title}</h2>
-                <img src={movie.medium_cover_image} alt={movie.title} />
+                <img
+                  src={movie.medium_cover_image ?? undefined}
+                  alt={movie.title ?? undefined}
+                />
               </Link>
             </li>
           ))}
